@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  mypsql:
+    image: postgres
+    container_name: mypsql
+    environment:
+      POSTGRES_DB: appdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  flaskapp:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mypsql
